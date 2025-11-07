@@ -1,0 +1,47 @@
+{
+  "name": "coc-any-rule",
+  "version": "0.0.1",
+  "description": "常用正则大全",
+  "author": "chuyanlong <a1008611abcd@126.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.82"
+  },
+  "scripts": {
+    "watch": "node esbuild.mjs --watch",
+    "build": "node esbuild.mjs",
+    "prepare": "node esbuild.mjs"
+  },
+  "devDependencies": {
+    "coc.nvim": "^0.0.83-next.18",
+    "esbuild": "^0.19.8",
+    "typescript": "^5.3.3"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-any-rule configuration",
+      "properties": {
+        "any-rule.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-any-rule extension"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "any-rules",
+        "title": "常用正则大全",
+        "description": "常用正则大全"
+      }
+    ]
+  }
+}
