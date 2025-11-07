@@ -9,11 +9,11 @@ export default class RuleList extends BasicList {
   constructor() {
     super();
     this.addAction('open', (item: ListItem) => {
-      this.replace(item.data);
+      this.insert(item.data);
     });
   }
 
-  public async replace(rule: Rule) {
+  public async insert(rule: Rule) {
     const editor = window.activeTextEditor;
     let range = await window.getCursorPosition();
     const ruleString = String(rule.rule);
