@@ -2,7 +2,6 @@ import { HoverProvider, Hover, Position, LinesTextDocument } from 'coc.nvim';
 import rules from './rules';
 export class RegExpHoverProvider implements HoverProvider {
   constructor() {}
-
   public async provideHover(
     document: LinesTextDocument,
     position: Position
@@ -15,17 +14,31 @@ export class RegExpHoverProvider implements HoverProvider {
     if (index !== -1) {
       const rule = rules[index];
       if (!rules[index].examples?.length) return;
-      let value = `@正则名字\n\n${rule.title}\n\n@正确用例\n\n${rules[index].examples.join('\n')}`;
+      const values: { value: string; language: string }[] = [];
+      values.push({
+        value: rule.title,
+        language: 'markdown',
+      });
+      values.push({
+        value: '正确数据',
+        language: 'markdown',
+      });
+      values.push({
+        value: rules[index].examples.join('\n'),
+        language: 'markdown',
+      });
       if (rules[index].counterExamples && rules[index].counterExamples?.length) {
-        value += `\n\n@错误用例\n\n${rules[index].counterExamples.join('\n')} `;
+        values.push({
+          value: '错误数据',
+          language: 'markdown',
+        });
+        values.push({
+          value: rules[index].counterExamples.join('\n'),
+          language: 'markdown',
+        });
       }
       return {
-        contents: [
-          {
-            value: value,
-            language: 'markdown',
-          },
-        ],
+        contents: values,
       };
     }
   }
