@@ -4,6 +4,7 @@ export interface Rule {
   examples: string[];
   counterExamples?: string[];
 }
+
 export default [
   {
     title: '火车车次',
