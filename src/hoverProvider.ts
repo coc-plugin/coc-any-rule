@@ -19,21 +19,15 @@ export class RegExpHoverProvider implements HoverProvider {
         value: rule.title,
         language: 'markdown',
       });
-      values.push({
-        value: '正确数据',
-        language: 'markdown',
-      });
-      values.push({
-        value: rules[index].examples.join('\n'),
-        language: 'markdown',
-      });
-      if (rules[index].counterExamples && rules[index].counterExamples?.length) {
+      if (rules[index].examples.join('\n').length) {
         values.push({
-          value: '错误数据',
+          value: rules[index].examples.join('\n'),
           language: 'markdown',
         });
+      }
+      if (rules[index].note) {
         values.push({
-          value: rules[index].counterExamples.join('\n'),
+          value: rules[index].note,
           language: 'markdown',
         });
       }

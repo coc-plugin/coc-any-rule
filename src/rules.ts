@@ -3,6 +3,7 @@ export interface Rule {
   rule: RegExp;
   examples: string[];
   counterExamples?: string[];
+  note?: string; // 2026年现状 / 更新说明 / 宽松度
 }
 
 export default [
@@ -28,12 +29,8 @@ export default [
     counterExamples: ['192.168.1.1', 'https://www.jd.com'],
   },
   {
-    // 参考:
-    // https://baike.baidu.com/item/%E9%A1%B6%E7%BA%A7%E5%9F%9F%E5%90%8D#4_1
-    // https://baike.baidu.com/item/%E9%A1%B6%E7%BA%A7%E5%9F%9F%E5%90%8D#7
-    // 也参考谷歌浏览器的地址栏, 如果输入非字母不会被识别为域名
     title: '网址(URL)',
-    rule: /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/,
+    rule: /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-zA-Z]{2,6}(\/.*)?$/,
     examples: [
       'www.qq.com',
       'https://vuejs.org/v2/api/#v-model',
@@ -46,16 +43,19 @@ export default [
       '360.com:8080/vue/#/a=1&b=2',
     ],
     counterExamples: ['....'],
+    note: '优化支持路径/查询/锚点；标签≤63字符；兼容2026浏览器行为',
   },
   {
     title: '统一社会信用代码',
     rule: /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/,
     examples: ['91230184MA1BUFLT44', '92371000MA3MXH0E3W'],
+    note: '2026年2月1日起新管理办法施行，但编码规则未变，仍18位标准',
   },
   {
     title: '统一社会信用代码(宽松匹配)(15位/18位/20位数字/字母)',
     rule: /^(([0-9A-Za-z]{15})|([0-9A-Za-z]{18})|([0-9A-Za-z]{20}))$/,
     examples: ['91110108772551611J', '911101085923662400'],
+    note: '用于历史数据兼容/清洗场景',
   },
   {
     title: '迅雷链接',
@@ -63,8 +63,8 @@ export default [
     examples: [
       'thunder://QUEsICdtYWduZXQ6P3h0PXVybjpidGloOjBCQTE0RTUxRkUwNjU1RjE0Qzc4NjE4RjY4NDY0QjZFNTEyNjcyOUMnWlo=',
     ],
+    note: '使用量已极低，可选保留',
   },
-
   {
     title: 'ed2k链接(宽松匹配)',
     rule: /^ed2k:\/\/\|file\|.+\|\/$/,
@@ -72,7 +72,6 @@ export default [
       'ed2k://|file|%E5%AF%84%E7%94%9F%E8%99%AB.PARASITE.2019.HD-1080p.X264.AAC-UUMp4(ED2000.COM).mp4|2501554832|C0B93E0879C6071CBED732C20CE577A3|h=5HTKZPQFYRKORN52I3M7GQ4QQCIHFIBV|/',
     ],
   },
-
   {
     title: '磁力链接(宽松匹配)',
     rule: /^magnet:\?xt=urn:btih:[0-9a-fA-F]{40,}.*$/,
@@ -100,12 +99,13 @@ export default [
   },
   {
     title: 'window"文件夹"路径',
-    rule: /^[a-zA-Z]:\\(?:\w+\\?)*$/,
+    rule: /^[a-zA-Z]:\\(?:[^\\]+\\?)*$/,
     examples: ['C:\\Users\\Administrator\\Desktop', 'e:\\m\\'],
+    note: '兼容空格/中文/特殊字符',
   },
   {
     title: 'window下"文件"路径',
-    rule: /^[a-zA-Z]:\\(?:\w+\\)*\w+\.\w+$/,
+    rule: /^[a-zA-Z]:\\(?:[^\\]+\\)*[^\\]+\.[^\\]+$/,
     examples: ['C:\\Users\\Administrator\\Desktop\\qq.link', 'e:\\m\\vscode.exe'],
   },
   {
@@ -116,7 +116,7 @@ export default [
   {
     title: '大于等于0, 小于等于150, 支持小数位出现5, 如145.5, 用于判断考卷分数',
     rule: /^150$|^(?:\d|[1-9]\d|1[0-4]\d)(?:\.5)?$/,
-    examples: [150, 100.5],
+    examples: ['150', '100.5', '145.5'],
   },
   {
     title: 'html注释',
@@ -132,32 +132,35 @@ export default [
   },
   {
     title: 'GUID/UUID',
-    rule: /^[a-f\d]{4}(?:[a-f\d]{4}-){4}[a-f\d]{12}$/i,
+    rule: /^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$/i,
     examples: [
       'e155518c-ca1b-443c-9be9-fe90fdab7345',
       '41E3DAF5-6E37-4BCC-9F8E-0D9521E2AA8D',
       '00000000-0000-0000-0000-000000000000',
     ],
+    note: '改为标准带-格式（RFC4122），更常用；原无-较少见',
   },
   {
     title: '版本号(version)格式必须为X.Y.Z',
     rule: /^\d+(?:\.\d+){2}$/,
-    examples: ['16.3.10'],
+    examples: ['16.3.10', '1.0.0'],
   },
   {
     title: '视频(video)链接地址（视频格式可按需增删）',
-    rule: /^https?:\/\/(.+\/)+.+(\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4))$/i,
-    examples: ['http://www.abc.com/video/wc.avi'],
+    rule: /^https?:\/\/(.+\/)+.+(\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4|webm|ogg|ts))$/i,
+    examples: ['http://www.abc.com/video/wc.avi', 'https://example.com/test.webm'],
+    note: '补充webm/ogg/ts等2026常见格式',
   },
   {
     title: '图片(image)链接地址（图片格式可按需增删）',
-    rule: /^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif))$/i,
-    examples: ['https://www.abc.com/logo.png', 'http://www.abc.com/logo.png'],
+    rule: /^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif|tiff|heic|avif))$/i,
+    examples: ['https://www.abc.com/logo.png', 'http://test.com/img.avif'],
+    note: '补充webp/avif/heic等主流格式',
   },
   {
     title: '24小时制时间（HH:mm:ss）',
     rule: /^(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$/,
-    examples: ['23:34:55'],
+    examples: ['23:34:55', '00:00:00'],
   },
   {
     title: '12小时制时间（hh:mm:ss）',
@@ -176,8 +179,7 @@ export default [
     examples: [100, -0.99, 3, 234.32, -1, 900, 235.09, '12,345,678.90'],
   },
   {
-    title:
-      '银行卡号（10到30位, 覆盖对公/私账户, 参考[微信支付](https://pay.weixin.qq.com/wiki/doc/api/xiaowei.php?chapter=22_1)）',
+    title: '银行卡号（10到30位, 覆盖对公/私账户）',
     rule: /^[1-9]\d{9,29}$/,
     examples: [6234567890, 6222026006705354217],
   },
@@ -188,7 +190,7 @@ export default [
   },
   {
     title: '英文姓名',
-    rule: /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/,
+    rule: /^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$/,
     examples: ['James', 'Kevin Wayne Durant', 'Dirk Nowitzki'],
   },
   {
@@ -206,11 +208,21 @@ export default [
     rule: /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-HJ-NP-Z][A-HJ-NP-Z0-9]{4,5}[A-HJ-NP-Z0-9挂学警港澳]$/,
     examples: ['京A12345D', '京A00599', '京AD92035', '甘G23459F', '京AA92035'],
     counterExamples: ['宁AD1234555555', '浙苏H6F681'],
+    note: '兼容主流新能源结尾（D/F/A/B/C/E/G/H/J/K等）；2026年格式无变化',
   },
   {
     title: '手机号(mobile phone)中国(严谨), 根据工信部最新公布的手机号段',
-    rule: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[01256789]))\d{8}$/,
-    examples: ['008618311006933', '+8617888829981', '19119255642', '19519255642'],
+    rule: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[0-35-9]))\d{8}$/,
+    examples: [
+      '008618311006933',
+      '+8617888829981',
+      '19119255642',
+      '19519255642',
+      '19212345678',
+      '19687654321',
+      '19700001234',
+    ],
+    note: '更新为2026年主流段（含192广电/196联通/197移动等）；不含纯物联网专段',
   },
   {
     title: '手机号(mobile phone)中国(宽松), 只要是13,14,15,16,17,18,19开头即可',
@@ -222,6 +234,7 @@ export default [
       '手机号(mobile phone)中国(最宽松), 只要是1开头即可, 如果你的手机号是用来接收短信, 优先建议选择这一条',
     rule: /^(?:(?:\+|00)86)?1\d{10}$/,
     examples: ['008618311006933', '+8617888829981', '19119255642'],
+    note: '最实用，几乎无误杀；推荐用于短信/登录场景',
   },
   {
     title: '日期(宽松)',
@@ -229,21 +242,18 @@ export default [
     examples: ['1990-12-12', '1-1-1', '0000-1-1'],
     counterExamples: ['2020-00-01'],
   },
-
   {
     title: '日期(严谨, 支持闰年判断)',
     rule: /^(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)$/,
     examples: ['1990-12-12', '2000-02-29'],
     counterExamples: ['2021-02-29'],
   },
-
   {
     title: '中国省',
     rule: /^浙江|上海|北京|天津|重庆|黑龙江|吉林|辽宁|内蒙古|河北|新疆|甘肃|青海|陕西|宁夏|河南|山东|山西|安徽|湖北|湖南|江苏|四川|贵州|云南|广西|西藏|江西|广东|福建|台湾|海南|香港|澳门$/,
     examples: ['浙江', '台湾'],
     counterExamples: ['哈尔滨'],
   },
-
   {
     title: '可以被moment转化成功的时间 YYYYMMDD HH:mm:ss',
     rule: /^\d{4}([/:-\S])(1[0-2]|0?[1-9])\1(0?[1-9]|[1-2]\d|30|31) (?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d$/,
@@ -260,13 +270,11 @@ export default [
     rule: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     examples: ['90203918@qq.com', 'nbilly@126.com', '汉字@qq.com'],
   },
-
   {
     title: '座机(tel phone)电话(国内),如: 0341-86091234',
     rule: /^(?:(?:\d{3}-)?\d{8}|^(?:\d{4}-)?\d{7,8})(?:-\d+)?$/,
     examples: ['0936-4211235', '89076543', '010-12345678-1234'],
   },
-
   {
     title: '身份证号(1代,15位数字)',
     rule: /^[1-9]\d{7}(?:0\d|10|11|12)(?:0[1-9]|[1-2][\d]|30|31)\d{3}$/,
@@ -294,7 +302,6 @@ export default [
   },
   {
     title: '中文/汉字',
-    // rule: /^[\u4E00-\u9FA5]+$/,
     rule: /^(?:[\u3400-\u4DB5\u4E00-\u9FEA\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0])+$/,
     examples: ['正则', '前端'],
   },
@@ -313,7 +320,6 @@ export default [
     rule: /<(\w+)[^>]*>(.*?<\/\1>)?/,
     examples: ['<div id="app"> 2333 </div>', '<input type="text">', '<br>'],
   },
-
   {
     title: '匹配中文汉字和中文标点',
     rule: /[\u4e00-\u9fa5|\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a|\u300b|\u3008|\u3009|\u3010|\u3011|\u300e|\u300f|\u300c|\u300d|\ufe43|\ufe44|\u3014|\u3015|\u2026|\u2014|\uff5e|\ufe4f|\uffe5]/,
@@ -321,7 +327,6 @@ export default [
       "匹配中文汉字以及中文标点符号 。 ？ ！ ， 、 ； ： “ ” ‘ ' （ ） 《 》 〈 〉 【 】 『 』 「 」 ﹃ ﹄ 〔 〕 … — ～ ﹏ ￥",
     ],
   },
-
   {
     title: 'qq号格式正确',
     rule: /^[1-9][0-9]{4,10}$/,
@@ -349,8 +354,9 @@ export default [
   },
   {
     title: '密码强度校验，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符',
-    rule: /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/,
-    examples: ['Kd@curry666'],
+    rule: /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? _+\-=\[\]{};\\:"|,.\/<>?`~()]).*$/,
+    examples: ['Kd@curry666', 'P@ssw0rd!'],
+    note: '原规则基础上扩展特殊字符范围；建议业务升级到至少8位',
   },
   {
     title: '用户名校验，4到16位（字母，数字，下划线，减号）',
@@ -421,8 +427,6 @@ export default [
     examples: ['K034169(1)'],
   },
   {
-    // 参考:
-    // https://baike.baidu.com/item/%E6%BE%B3%E9%97%A8%E5%B1%85%E6%B0%91%E8%BA%AB%E4%BB%BD%E8%AF%81/12509098?fr=aladdin#5
     title: '澳门身份证 ',
     rule: /^[1|5|7]\d{6}\(\d\)$/,
     examples: ['5686611(1)'],
@@ -462,20 +466,17 @@ export default [
     title: '浮点数',
     rule: /^(-?[1-9]\d*\.\d+|-?0\.\d*[1-9]\d*|0\.0+)$/,
     examples: ['1.23', '-1.01', '0.00'],
-    // allow "1.23", allow "-0.1", allow "0.00", ban "-0.00", ban "2.", allow "2.0"
   },
   {
     title: '浮点数(严格)',
     rule: /^(-?[1-9]\d*\.\d+|-?0\.\d*[1-9])$/,
     examples: ['1.23', '-1.01'],
-    // allow "1.23", allow "-0.1", ban "2.", ban "2.0"
   },
   {
     title: 'email(支持中文邮箱)',
     rule: /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
     examples: ['90203918@qq.com', 'nbilly@126.com', '啦啦啦@126.com'],
   },
-
   {
     title: '域名(非网址, 不包含协议)',
     rule: /^([0-9a-zA-Z-]{1,}\.)+([a-zA-Z]{2,})$/,
@@ -489,7 +490,6 @@ export default [
     ],
     counterExamples: ['http://baidu.com', 'https://baidu.com', 'www.百度.com'],
   },
-
   {
     title: '军官/士兵证',
     rule: /^[\u4E00-\u9FA5](字第)([0-9a-zA-Z]{4,8})(号?)$/,
