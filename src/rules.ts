@@ -43,13 +43,13 @@ export default [
       '360.com:8080/vue/#/a=1&b=2',
     ],
     counterExamples: ['....'],
-    note: '优化支持路径/查询/锚点；标签≤63字符；兼容2026浏览器行为',
+    note: '2026优化：支持路径/查询/锚点/端口；标签≤63字符；兼容现代浏览器行为',
   },
   {
     title: '统一社会信用代码',
     rule: /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/,
     examples: ['91230184MA1BUFLT44', '92371000MA3MXH0E3W'],
-    note: '2026年2月1日起新管理办法施行，但编码规则未变，仍18位标准',
+    note: '2026年2月1日起新管理办法施行，编码规则未变，仍为18位标准',
   },
   {
     title: '统一社会信用代码(宽松匹配)(15位/18位/20位数字/字母)',
@@ -63,7 +63,7 @@ export default [
     examples: [
       'thunder://QUEsICdtYWduZXQ6P3h0PXVybjpidGloOjBCQTE0RTUxRkUwNjU1RjE0Qzc4NjE4RjY4NDY0QjZFNTEyNjcyOUMnWlo=',
     ],
-    note: '使用量已极低，可选保留',
+    note: '2026年使用量极低，可选保留',
   },
   {
     title: 'ed2k链接(宽松匹配)',
@@ -138,7 +138,7 @@ export default [
       '41E3DAF5-6E37-4BCC-9F8E-0D9521E2AA8D',
       '00000000-0000-0000-0000-000000000000',
     ],
-    note: '改为标准带-格式（RFC4122），更常用；原无-较少见',
+    note: '标准RFC4122带-格式，更常用',
   },
   {
     title: '版本号(version)格式必须为X.Y.Z',
@@ -147,15 +147,15 @@ export default [
   },
   {
     title: '视频(video)链接地址（视频格式可按需增删）',
-    rule: /^https?:\/\/(.+\/)+.+(\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4|webm|ogg|ts))$/i,
+    rule: /^https?:\/\/(.+\/)+.+(\.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4|webm|ogg|ts|mpd|m3u8))$/i,
     examples: ['http://www.abc.com/video/wc.avi', 'https://example.com/test.webm'],
-    note: '补充webm/ogg/ts等2026常见格式',
+    note: '2026补充常见流媒体格式（mpd/m3u8等）',
   },
   {
     title: '图片(image)链接地址（图片格式可按需增删）',
-    rule: /^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif|tiff|heic|avif))$/i,
+    rule: /^https?:\/\/(.+\/)+.+(\.(gif|png|jpg|jpeg|webp|svg|psd|bmp|tif|tiff|heic|avif|ico))$/i,
     examples: ['https://www.abc.com/logo.png', 'http://test.com/img.avif'],
-    note: '补充webp/avif/heic等主流格式',
+    note: '2026主流格式已包含webp/avif/heic/ico等',
   },
   {
     title: '24小时制时间（HH:mm:ss）',
@@ -176,12 +176,12 @@ export default [
   {
     title: '数字/货币金额（支持负数、千分位分隔符）',
     rule: /^-?\d{1,3}(,\d{3})*(\.\d{1,2})?$/,
-    examples: [100, -0.99, 3, 234.32, -1, 900, 235.09, '12,345,678.90'],
+    examples: ['100', '-0.99', '3', '234.32', '-1', '900', '235.09', '12,345,678.90'],
   },
   {
     title: '银行卡号（10到30位, 覆盖对公/私账户）',
     rule: /^[1-9]\d{9,29}$/,
-    examples: [6234567890, 6222026006705354217],
+    examples: ['6234567890', '6222026006705354217'],
   },
   {
     title: '中文姓名',
@@ -197,6 +197,7 @@ export default [
     title: '车牌号(新能源)',
     rule: /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-HJ-NP-Z](([DF]((?![IO])[a-zA-Z0-9](?![IO]))[0-9]{4})|([0-9]{5}[DF]))$/,
     examples: ['京AD92035', '甘G23459F', '京A19203D'],
+    note: '2026格式无变化，纯电动优先D，非纯电动优先F',
   },
   {
     title: '车牌号(非新能源)',
@@ -208,7 +209,7 @@ export default [
     rule: /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领][A-HJ-NP-Z][A-HJ-NP-Z0-9]{4,5}[A-HJ-NP-Z0-9挂学警港澳]$/,
     examples: ['京A12345D', '京A00599', '京AD92035', '甘G23459F', '京AA92035'],
     counterExamples: ['宁AD1234555555', '浙苏H6F681'],
-    note: '兼容主流新能源结尾（D/F/A/B/C/E/G/H/J/K等）；2026年格式无变化',
+    note: '2026兼容主流新能源结尾（D/F及扩展字母），格式无重大变化',
   },
   {
     title: '手机号(mobile phone)中国(严谨), 根据工信部最新公布的手机号段',
@@ -222,7 +223,7 @@ export default [
       '19687654321',
       '19700001234',
     ],
-    note: '更新为2026年主流段（含192广电/196联通/197移动等）；不含纯物联网专段',
+    note: '2026更新：覆盖主流段（含192广电/196联通/197移动/191电信等）；不含纯物联网专段',
   },
   {
     title: '手机号(mobile phone)中国(宽松), 只要是13,14,15,16,17,18,19开头即可',
@@ -234,7 +235,7 @@ export default [
       '手机号(mobile phone)中国(最宽松), 只要是1开头即可, 如果你的手机号是用来接收短信, 优先建议选择这一条',
     rule: /^(?:(?:\+|00)86)?1\d{10}$/,
     examples: ['008618311006933', '+8617888829981', '19119255642'],
-    note: '最实用，几乎无误杀；推荐用于短信/登录场景',
+    note: '2026最实用，几乎无误杀；推荐用于短信/登录场景',
   },
   {
     title: '日期(宽松)',
@@ -279,6 +280,7 @@ export default [
     title: '身份证号(1代,15位数字)',
     rule: /^[1-9]\d{7}(?:0\d|10|11|12)(?:0[1-9]|[1-2][\d]|30|31)\d{3}$/,
     examples: ['123456991010193'],
+    note: '2026年已极少使用，主要用于历史兼容',
   },
   {
     title: '身份证号(2代,18位数字),最后一位是校验位,可能为数字或字符X',
@@ -292,8 +294,9 @@ export default [
   },
   {
     title: '护照（包含香港、澳门）',
-    rule: /(^[EeKkGgDdSsPpHh]\d{8}$)|(^(([Ee][a-fA-F])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa])|(1[45]))\d{7}$)/,
-    examples: ['s28233515', '141234567', '159203084', 'MA1234567', 'K25345719'],
+    rule: /(^[EeKkGgDdSsPpHh]\d{8}$)|(^(([Ee][a-fA-F])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa])|(1[45]))\d{7}$)|(^E[A-HJ-NP-Z]\d{7}$)/,
+    examples: ['s28233515', '141234567', '159203084', 'MA1234567', 'K25345719', 'EA1234567'],
+    note: '2026更新：覆盖普通护照E+字母(非I/O)+7数字等主流9位格式',
   },
   {
     title: '帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线组合',
@@ -313,7 +316,7 @@ export default [
   {
     title: '只包含数字',
     rule: /^\d+$/,
-    examples: [12345678],
+    examples: ['12345678'],
   },
   {
     title: 'html标签(宽松匹配)',
@@ -330,7 +333,7 @@ export default [
   {
     title: 'qq号格式正确',
     rule: /^[1-9][0-9]{4,10}$/,
-    examples: [903013545, 9020304],
+    examples: ['903013545', '9020304'],
   },
   {
     title: '数字和字母组成',
@@ -353,10 +356,10 @@ export default [
     examples: ['ABC', 'KD'],
   },
   {
-    title: '密码强度校验，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符',
-    rule: /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? _+\-=\[\]{};\\:"|,.\/<>?`~()]).*$/,
+    title: '密码强度校验，最少8位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符',
+    rule: /^\S*(?=\S{8,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? _+\-=\[\]{};\\:"|,.\/<>?`~()]).*$/,
     examples: ['Kd@curry666', 'P@ssw0rd!'],
-    note: '原规则基础上扩展特殊字符范围；建议业务升级到至少8位',
+    note: '2026建议至少8位；扩展特殊字符范围',
   },
   {
     title: '用户名校验，4到16位（字母，数字，下划线，减号）',
@@ -393,7 +396,7 @@ export default [
   },
   {
     title: '中文和数字',
-    rule: /^((?:[\u3400-\u4DB5\u4E00-\u9FEA\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0])|(\d))+$/,
+    rule: /^((?:[\u3400-\u4DB5\u4E00-\u9FEA\uFA0E\uFA0F\uFA11\uFA13\uFA14\uFA1F\uFA21\uFA23\uFA24\uFA27-\uFA29]|[\uD840-\uD868\uD86A-\uD86C\uD86F-\uD872\uD874-\uD879][\uDC00-\uDFFF]|\uD869[\uDC00-\uDED6\uDF00-\uDFFF]|\uD86D[\uDC00-\uDF34\uDF40-\uDFFF]|\uD86E[\uDC00-\uDC1D\uDC20-\uDFFF]|\uD873[\uDC00-\uDEA1\uDEB0-\uDFFF]|\uD87A[\uDC00-\uDFE0])|\d)+$/,
     examples: ['哈哈哈', '你好6啊'],
   },
   {
@@ -449,17 +452,17 @@ export default [
   {
     title: '正整数，不包含0',
     rule: /^\+?[1-9]\d*$/,
-    examples: [1231],
+    examples: ['1231'],
   },
   {
     title: '负整数，不包含0',
     rule: /^-[1-9]\d*$/,
-    examples: [-1231],
+    examples: ['-1231'],
   },
   {
     title: '整数',
     rule: /^(?:0|(?:-?[1-9]\d*))$/,
-    examples: [-1231, 123, 0],
+    examples: ['-1231', '123', '0'],
     counterExamples: ['01'],
   },
   {
